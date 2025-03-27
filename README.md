@@ -58,9 +58,8 @@ pnpm build  # 输出到 dist/ 目录
 cd backend/shu-tu-express
 npm install
 
-# 配置数据库（修改 config/db.js）
-MONGO_URI=mongodb://localhost:27017/shu-tu
-
+# 配置数据库（修改  db/db.jss）
+  mongoose.connect(`mongodb://${DBHOST}:${DBPORT}/${DBNAME}`);
 # 启动服务
 npm start    # 监听 http://localhost:3000
 ```
