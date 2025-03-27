@@ -102,10 +102,8 @@ npm start    # 监听 http://localhost:3000
 
 - **远程数据库（示例）**：
   ```javascript
-  // config/db.js
-  module.exports = {
-    mongoURI: process.env.MONGO_URI || 'mongodb+srv://<user>:<pass>@cluster.example.mongodb.net/shu-tu',
-  };
+  // db/db.js
+ mongoose.connect(`mongodb://${DBHOST}:${DBPORT}/${DBNAME}`);
   ```
 
 ### 4. 接口文档
