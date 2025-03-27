@@ -6,7 +6,7 @@ const logger = require('morgan');
 const cors = require('cors');
 
 const picRouter =require('./routes/pic')
-const sellerRouter=require('./routes/seller')
+const posInfoRouter=require('./routes/postInfo')
 const app = express();
 
 
@@ -19,8 +19,8 @@ app.use(cors());
 
 //上传本地照片路由
 app.use('/',picRouter)
-//发帖路由
-app.use('/api',sellerRouter)
+//帖子相关操作路由
+app.use('/api',posInfoRouter)
 
 
 // catch 404 and forward to error handler

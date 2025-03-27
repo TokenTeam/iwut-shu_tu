@@ -25,6 +25,7 @@ const BookBarSchema=new mongoose.Schema({
         type:String,
         // required:true
         unique:true,
+        sparse:true,//允许多个空值
     },
 
     //书籍图片

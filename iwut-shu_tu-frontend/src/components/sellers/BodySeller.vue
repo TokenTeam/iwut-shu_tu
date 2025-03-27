@@ -101,7 +101,7 @@
     <div class="button-group">
       <t-button
         theme="primary"
-        variant="light"
+        variant="base"
         type="submit"
         size="large"
         :disabled="formStore.isSubmitting"

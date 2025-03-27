@@ -1,8 +1,9 @@
 import { http } from "@/utils";
 
-export function getBookInfoAPI(){
+//获取帖子API
+export function getBookInfoAPI(page:number){
     return http({
-        url:'/infos/gain',
+        url:`/infos/gain?page=${page||1}`,
         method:'GET',
     })
 }
