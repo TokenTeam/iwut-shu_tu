@@ -82,22 +82,6 @@ npm start    # 监听 http://localhost:3000
    });
    ```
 
-## 五、后端详细说明
-
-### 1. 目录结构
-```
-backend/shu-tu-express/
-├── app.js          # 应用入口
-├── bin/
-│   └── www       # 启动脚本
-├── config/
-│   └── db.js     # 数据库配置
-├── models/        # Mongoose 模型
-├── routes/        # 路由定义
-├── public/        # 静态资源（Jade 模板）
-├── views/         # Jade 视图（可选）
-└── package.json   # 依赖配置
-```
 
 ### 2. 常用脚本
 | 命令          | 说明                     |
@@ -129,7 +113,7 @@ backend/shu-tu-express/
 - **文件上传**：`POST /api/files/upload`（使用 Multer）
 - **跨域配置**：已全局启用 CORS（`app.use(cors())`）
 
-## 六、完整启动流程（前后端）
+## 五、完整启动流程（前后端）
 
 1. **克隆项目**：
    ```bash
