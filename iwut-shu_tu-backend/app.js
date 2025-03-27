@@ -17,8 +17,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-
+//上传本地照片路由
 app.use('/',picRouter)
+//发帖路由
 app.use('/api',sellerRouter)
 
 

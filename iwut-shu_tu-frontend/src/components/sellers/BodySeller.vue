@@ -254,19 +254,6 @@ const rules = {
       trigger: 'blur',
     },
   ],
-  // 上传照片规则：选填，若上传文件数量需在 1 到 5 张之间
-  photo: [
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        if (value && value.length > 0 && (value.length < 1 || value.length > 5)) {
-          callback(new Error('请上传 1 到 5 张照片'))
-        } else {
-          callback()
-        }
-      },
-      trigger: 'change',
-    },
-  ],
   // 分类规则：必填
   classification: [{ required: true, message: '请选择分类', trigger: 'change' }],
 }
