@@ -103,7 +103,7 @@ npm start    # 监听 http://localhost:3000
 - **远程数据库（示例）**：
   ```javascript
   // db/db.js
- mongoose.connect(`mongodb://${DBHOST}:${DBPORT}/${DBNAME}`);
+    mongoose.connect(`mongodb://${DBHOST}:${DBPORT}/${DBNAME}`);
   ```
 
 ### 4. 接口文档
