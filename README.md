@@ -261,3 +261,6 @@ npm start    # 监听 http://localhost:3000
    pnpm dev
    ```
 
+# 六、许可证
+本项目采用 MIT License 开源协议，详细内容见 LICENSE 文件。
+
