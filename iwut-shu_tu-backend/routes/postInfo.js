@@ -42,28 +42,51 @@ router.post('/info/submission',async(req,res)=>{
         })
     }
 })
-
+const cache ={};//简单的内存缓存（以后可以替换成Redis）
+const u_id=0;//用户标识先用着用于标识获取该用户已获取的帖子
 //获取帖子
 router.get('/infos/gain',async(req,res)=>{
 try {
-    // const dataArray=[]
-    // const dataSize=5
-    //使用游标
-    // const bookbarInfo= BookBarModel.find().cursor()
-    // for await(const info of bookbarInfo){
-    //     dataArray.push(info)
-    //     if(dataArray.length===dataSize){
-    //         break;
-    //     }
-    // }  
 
-    //使用分页查询
-    const page = parseInt(req.query.page)|| 1;
-    const limit =5;//一次最多查询5条
-    const offset =(page-1)*limit//偏移量
+    //判断请求头是否需要清空缓存
+    const isRefresh =req.headers['x-refresh']==='true'
+    if(isRefresh){
+        cache[u_id]=[]//清空缓存
+    }
 
-    const posts =await BookBarModel.find().skip(offset).limit(limit).exec();
-    console.log(posts)
+    const limit =4;//一次最多查询5条
+
+    //获取该用户已经获取的帖子ID
+    const existingIds =cache[u_id]||[]
+
+    //构建查询条件，排除已获取的帖子如果existingIds不为空，则使用$nin操作符过滤掉这些帖子;否则，查询所有帖子
+    const query = existingIds.length>0?{_id:{$nin:existingIds}}:{};
+    //计算符合条件的帖子总数
+    const totalCount =await BookBarModel.countDocuments(query)
+
+    if(totalCount === 0){
+        return res.json({
+            code:"0002",
+            msg:'没有更多帖子了',
+            data:[]
+        })
+    }
+  
+    let randomSkip =0
+    if(totalCount-limit+1>0){
+        //获取0-totalCount-limit的偏移数确保能够获取limit条帖子
+    randomSkip = Math.floor(Math.random() * (totalCount - limit + 1));
+    }
+    //若已经不足5条则不进入条件判断randomSkip=0获取剩下的所有帖子
+
+
+    //从数据库中随机获取符合条件的帖子
+    const posts =await BookBarModel.find(query).skip(randomSkip).limit(limit).exec();
+    console.log(posts);
+    //更新缓存中的已获得帖子ID
+    const newIds =posts.map(post=>post._id)
+    cache[u_id]=existingIds.concat(newIds)
+
     res.json({
         code:'0000',
         msg:'获取bookbar成功',

@@ -3,24 +3,33 @@ import { useFormStore } from '@/stores/formStore';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 import Bookbar from './BookBar.vue'
+import { _ActionSheet } from 'tdesign-mobile-vue';
 
 const formStore =useFormStore()
+
+//进入页面获取帖子
 onMounted(()=>{
-  formStore.getFormList() 
+  formStore.getFormList(true) 
   console.log(formStore.formDataList);
 })
 
-const refScrollpage=ref<number>(1)
 const refreshing = ref<boolean>(false);
-const handleRefresh = (value: any) => {
+
+//下拉刷新
+const handleRefresh = () => {
   refreshing.value = true;
   setTimeout(() => {
+    formStore.hasFetched =false
+    formStore.getFormList(true)
     refreshing.value = false;
   }, 1000);
 };
+
+//下滑刷新
 const handleScrolltolower = () => {
   formStore.hasFetched =false
-  formStore.getFormList(++refScrollpage.value) 
+  formStore.getFormList(false) 
+  console.log('aaaa');
 };
 
 </script>
@@ -33,7 +42,7 @@ const handleScrolltolower = () => {
     @scrolltolower="handleScrolltolower"
   >
 <div class="list">
-  <Bookbar v-for="(formItem,index) in formStore.formDataList" :key="index" :form-data="formItem"/>
+  <Bookbar v-for="(formItem) in formStore.formDataList" :key="formItem._id" :form-data="formItem"/>
   </div>
 </t-pull-down-refresh>
 </template>

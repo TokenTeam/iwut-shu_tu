@@ -37,12 +37,18 @@ export const useFormStore=defineStore('form',{
             }
         },
         //刷新网页获取初始帖子
-        async getFormList(page:number =1){
+        async getFormList(isRefresh:boolean =false){
             if(this.hasFetched) return;
             this.getError=null;
             try {
-                const response =await getBookInfoAPI(page)
-                this.formDataList.push(...(response.data.data))
+                //添加请求头用来判断是否清空后端缓存重新获取额定数量帖子
+                const headers =isRefresh?{'X-Refresh':'true'}:undefined
+
+                const response =await getBookInfoAPI(headers)
+
+                isRefresh?this.formDataList.splice(0,this.formDataList.length,...response.data.data):this.formDataList.push(...(response.data.data))
+                
+                console.log('bbbb',this.formDataList);
                 if(response.data.code==='0000'){
                     console.log(response.data.msg);
                     this.hasFetched=true
