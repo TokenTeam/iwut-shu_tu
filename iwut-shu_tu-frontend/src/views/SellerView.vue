@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon as TIcon } from 'tdesign-icons-vue-next';
-import NavSeller from '../components/sellers/NavSeller.vue'
-import BodySeller from '../components/sellers/BodySeller.vue'
+import NavSeller from '../components/seller/NavSeller.vue'
+import BodySeller from '../components/seller/BodySeller.vue'
 </script>
 
 <template>

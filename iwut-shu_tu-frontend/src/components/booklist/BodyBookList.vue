@@ -29,7 +29,7 @@ const handleRefresh = () => {
 const handleScrolltolower = () => {
   formStore.hasFetched =false
   formStore.getFormList(false) 
-  console.log('aaaa');
+
 };
 
 </script>

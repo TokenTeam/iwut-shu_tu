@@ -2,6 +2,8 @@ const express =require('express')
 const BookBarModel =require('../models/BookBarModel')
 const router =express.Router()
 
+
+
 //发布帖子
 router.post('/info/submission',async(req,res)=>{
     try {
@@ -25,7 +27,8 @@ router.post('/info/submission',async(req,res)=>{
             isbn:santiizedIsbn,
             price,
             imagePic,
-            classification
+            classification,
+            b_status:1
         })
         console.log('aaa',result);
         res.json({
@@ -42,6 +45,8 @@ router.post('/info/submission',async(req,res)=>{
         })
     }
 })
+
+
 const cache ={};//简单的内存缓存（以后可以替换成Redis）
 const u_id=0;//用户标识先用着用于标识获取该用户已获取的帖子
 //获取帖子
@@ -89,18 +94,37 @@ try {
 
     res.json({
         code:'0000',
-        msg:'获取bookbar成功',
+        msg:'获取帖子成功',
         data:posts
     })
 } catch (error) {
     return res.json({
         code:'1001',
-        msg:'获取bookbar失败',
+        msg:'获取帖子失败',
         data:null
     })
 }
+})
 
 
+//获取用户管理的帖子
+router.get('/infos/user',async(req,res)=>{
+    try {
+        //暂时没有用户id所以已查找全部内容代替
+        const posts =await BookBarModel().find().exec()
+
+        res.json({
+            code:'0000',
+            msg:"获取该用户帖子成功",
+            data:posts
+        })
+    } catch (error) {
+        return res.json({
+            code:'1002',
+            msg:'获取该用户帖子失败',
+            data:null
+        })
+    }
 })
 
 module.exports=router

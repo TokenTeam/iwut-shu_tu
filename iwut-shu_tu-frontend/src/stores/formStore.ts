@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import type { FormDataType } from "@/types";
 import { submitBookInfoAPI } from "@/apis/seller";
 import { getBookInfoAPI } from "@/apis/home";
-
+import { getUserPostAPI } from "@/apis/manage";
 export const useFormStore=defineStore('form',{
     state:()=>({
         formData:{} as FormDataType,//初始化表单数据为空对象
@@ -15,7 +15,7 @@ export const useFormStore=defineStore('form',{
     }),
     actions:{
 
-        //提交表单
+        //发帖界面提交表单操作
         async submitForm(){
             this.isSubmitting=true;
             this.submitError=null;
@@ -36,7 +36,8 @@ export const useFormStore=defineStore('form',{
                 this.isSubmitting=false
             }
         },
-        //刷新网页获取初始帖子
+
+        //主页面获取帖子操作
         async getFormList(isRefresh:boolean =false){
             if(this.hasFetched) return;
             this.getError=null;
@@ -58,5 +59,20 @@ export const useFormStore=defineStore('form',{
                 console.log('获取表单失败',error.response.data.msg);
             }
         },
+
+        //帖子管理页面获取用户帖子操作
+        async getUserPosts(){
+            try {
+                const response =await getUserPostAPI()
+
+                if(response.data.code==='0000'){
+                    console.log(response.data.msg);
+                    this.formDataList=response.data.data
+                }
+            } catch (error:any) {
+                this.getError=error.message
+                console.log('获取用户帖子失败',error.response.data.msg);
+            }
+        }
     }
 })

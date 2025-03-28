@@ -29,21 +29,9 @@
         placeholder="请详细描述你所需要出售的书籍，禁止发布重复信息，违法违规，广告营销，含二维码等内容。"
       ></t-textarea>
     </t-form-item>
-    <!-- tag -->
-    <t-form-item name="tag">
-      <t-button block variant="text" theme="primary" size="small" @click="visible = true"
-      > <t-tag variant="light" theme="warning">
-        <template #icon>
-          <Icon name="discount" />
-        </template>
-        添加标签
-      </t-tag></t-button
-    >
-    <t-popup v-model="visible" placement="center" style="width: 240px; height: 240px">
-      <t-icon class="close-btn" name="close-circle" size="32" color="#fff" @click="onClose" />
-    </t-popup>
-     
-    </t-form-item>
+    <!-- 添加tag -->
+
+    
 
     <!-- 上传图片 -->
     <t-form-item name="photo">
@@ -71,7 +59,7 @@
 
     <!-- ISBN -->
     <t-form-item label="ISBN" name="isbn">
-      <t-input v-model="formData.isbn" borderless placeholder="请输入内容"></t-input>
+      <t-input v-model="formData.isbn" borderless placeholder="请输入ISBN"></t-input>
     </t-form-item>
 
     <!-- 分类 -->
@@ -95,7 +83,7 @@
 
     <!-- 价格 -->
     <t-form-item label="价格" name="price">
-      <t-stepper v-model="formData.price" theme="filled" @change="onChangeStepper" />
+      <t-input v-model="formData.price" borderless placeholder="请输入价格"></t-input>
     </t-form-item>
 
     <div class="button-group">
@@ -122,10 +110,10 @@ import type {
   ProgressContext,
 } from 'tdesign-mobile-vue'
 import { useFormStore } from '@/stores/formStore'
-import { Icon } from 'tdesign-icons-vue-next'
 
-const visible = ref(false);
-const onClose = () => (visible.value = false);
+
+// const visible = ref(false);
+// const onClose = () => (visible.value = false);
 
 const props = defineProps({
   disabled: Boolean,
@@ -166,11 +154,12 @@ const action = 'http://localhost:3000/api/upload'
 const files = ref([])
 
 const formData: FormDataType = reactive({
+  _id:'',
   title: '',
   content: '',
   book: '',
   isbn: '',
-  price: 0,
+  price:null ,
   photo: files,
   classification: '',
 })

@@ -42,6 +42,10 @@ const handleSelected = (selected: ActionSheetItem, selectedIndex: number) => {
         router.push('/seller')
         break;
     }
+    case '管理':{
+      router.push('/manage')
+      break
+    }
     default:
         break;
   }

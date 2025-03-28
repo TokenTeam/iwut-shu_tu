@@ -70,13 +70,14 @@ const BookBarSchema=new mongoose.Schema({
         required:true
     }, */
 
-    //帖子状态：0-上架，1-下架,-1-待定
-   /*  b_status:{
+    //帖子状态：0-下架，1-上架,-1-待定
+    b_status:{
+        required:true,
         type:Number,
         enum:[0,1],
         default:-1,
     },
- */
+
     //帖子创建时间
     createdAt:{
         type:Date,

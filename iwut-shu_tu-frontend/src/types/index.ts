@@ -5,7 +5,7 @@ export interface FormDataType{
     content: string;
     book: string;
     isbn: string;
-    price: number;
+    price: number|null;
     photo: any; 
     classification: string;
 }
