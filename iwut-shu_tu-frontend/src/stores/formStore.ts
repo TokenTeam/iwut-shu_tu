@@ -2,7 +2,7 @@
 import { defineStore } from "pinia";
 import type { FormDataType } from "@/types";
 import { submitBookInfoAPI } from "@/apis/seller";
-import { getBookInfoAPI } from "@/apis/home";
+import { getBookInfoAPI,searchPostAPI } from "@/apis/home";
 import { getUserPostAPI,offPostAPI } from "@/apis/manage";
 export const useFormStore=defineStore('form',{
     state:()=>({
@@ -11,6 +11,7 @@ export const useFormStore=defineStore('form',{
         getError:null as string|null,//获取表单数组时的错误信息
         isSubmitting:false,//表示表单是否正在提交中
         submitError:null as string |null,//提交表单时的错误信息
+        isSearching:false as boolean,//表示搜索框是否正在搜索
     }),
     actions:{
 
@@ -38,6 +39,10 @@ export const useFormStore=defineStore('form',{
 
         //主页面获取帖子操作
         async getFormList(isRefresh:boolean =false){
+            //搜索时无法获取帖子
+            if(this.isSearching){
+                return
+            }
             this.getError=null;
             try {
                 //添加请求头用来判断是否清空后端缓存重新获取额定数量帖子
@@ -81,6 +86,25 @@ export const useFormStore=defineStore('form',{
        
             } catch (error:any) {
                 console.log('下架用户帖子失败',error);
+            }
+        },
+
+        //搜索指定帖子
+        async searchPost(keyword:string){
+            this.isSearching=true
+            try {
+                const response =await searchPostAPI(keyword)
+                console.log(response);
+                if(response.data.code==='0000'){
+                    this.formDataList=response.data.data
+                }
+                if(response.data.code==='1005'){
+                    this.isSearching=false
+                    //输入框为空时重新获取4条帖子
+                    this.getFormList(true)
+                }
+            } catch (error) {
+                console.log('搜索失败',error);
             }
         },
 

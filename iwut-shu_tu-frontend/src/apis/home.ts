@@ -10,3 +10,15 @@ export function getBookInfoAPI(headers?:Record<string,string>){
         }
     })
 }
+
+
+//搜索框搜索关键字API
+export function searchPostAPI(keyword:string){
+    return http({
+        url:'/infos/search',
+        method:'GET',
+        params:{
+            keyword
+        }        
+    })
+}

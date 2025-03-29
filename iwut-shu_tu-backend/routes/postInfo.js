@@ -165,4 +165,44 @@ router.get('/infos/off',async(req,res)=>{
         })
     }
 })
+
+
+//搜索指定帖子
+router.get('/infos/search',async(req,res)=>{
+    try {
+        const keyword = req.query.keyword
+        if(keyword===''){
+            return res.json({
+                code:'1005',
+                msg:'输入值为空',
+                data:null
+            })
+        }
+
+        //查询条件根据标题、内容、书名进行查询并且选项option为i不区分大小写并且排除下架状态的帖子
+        const query ={
+            $or:[
+                {title:{$regex:keyword,$options:'i'}},
+                {content:{$regex:keyword,$options:'i'}},
+                {book:{$regex:keyword,$options:'i'}}
+            ],
+            b_status:{$ne:0}
+        }
+
+        const posts = await BookBarModel.find(query).exec()
+
+        console.log(posts);
+        res.json({
+            code:'0000',
+            msg:'搜索ing',
+            data:posts
+        })
+    } catch (error) {
+        res.json({
+            code:'1006',
+            msg:'搜索失败',
+            data:null
+        })
+    }
+})
 module.exports=router
