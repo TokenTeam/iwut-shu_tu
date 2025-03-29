@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
       - name: docker build
         run: |
-          docker build . \
+          docker build ${{ vars.CONTEXT }} \
             --build-arg DBHOST="${{ vars.DBHOST }}" \
             --build-arg DBPORT="${{ vars.DBPORT }}" \
             --build-arg DBNAME="${{ vars.DBNAME }}" \
