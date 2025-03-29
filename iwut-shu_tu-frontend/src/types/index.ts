@@ -8,4 +8,5 @@ export interface FormDataType{
     price: number|null;
     photo: any; 
     classification: string;
+    b_status:number
 }

@@ -1,3 +1,152 @@
+<script lang="ts" setup>
+import { ref, reactive, defineProps, toRefs, onMounted } from 'vue'
+import type { PickerValue } from 'tdesign-mobile-vue'
+import type { FormDataType } from '@/types'
+import type {
+  UploadChangeContext,
+  UploadFile,
+  UploadRemoveContext,
+  SuccessContext,
+  ProgressContext,
+} from 'tdesign-mobile-vue'
+import { useFormStore } from '@/stores/formStore'
+
+// const visible = ref(false);
+// const onClose = () => (visible.value = false);
+
+const props = defineProps({
+  disabled: Boolean,
+})
+const { disabled } = toRefs(props)
+
+// upload
+const onFail = ({ file, e }: { file: UploadFile; e: ProgressEvent }): any => {
+  console.log('---onFail', file, e)
+  return null
+}
+
+const onProgress = ({ file, percent, type, e }: ProgressContext) => {
+  console.log('---onProgress:', file, percent, type, e)
+}
+const onChangeUpload = (
+  files: Array<UploadFile>,
+  { e, response, trigger, index, file }: UploadChangeContext,
+) => {
+  console.log('====onChange', files, e, response, trigger, index, file)
+}
+const onPreview = ({ file, e }: { file: UploadFile; e: MouseEvent }) => {
+  console.log('====onPreview', file, e)
+}
+const onSuccess = ({ file, fileList, response, e }: SuccessContext | any) => {
+  console.log('====onSuccess', file, 'aaa', fileList, 'bbb', e, 'ccc', response)
+  formData.photo.push({ name: file.name, type: file.type, url: response[0] })
+}
+const onRemove = ({ index, file, e }: UploadRemoveContext) => {
+  console.log('====onRemove', index, file, e)
+  // 从表单数据中移除对应的图片信息
+  formData.photo.splice(index!, 1)
+}
+const onSelectChange = (files: Array<UploadFile>) => {
+  console.log('====onSelectChange', files)
+}
+const action = 'http://localhost:3000/api/upload'
+const files = ref([])
+
+const formData: FormDataType = reactive({
+  _id: '',
+  title: '',
+  content: '',
+  book: '',
+  isbn: '',
+  price: null,
+  photo: files,
+  classification: '',
+})
+
+const form = ref(null)
+
+//分类
+const bookOptions = () => {
+  return [
+    {
+      label: '教科书',
+      value: '教科书',
+    },
+    {
+      label: '小说',
+      value: '小说',
+    },
+    {
+      label: '练习册',
+      value: '练习册',
+    },
+  ]
+}
+const bookState = reactive({
+  show: false,
+  book: [],
+})
+const selectedClassification = ref('')
+const onConfirm = (val: string[], context: number[]) => {
+  console.log(val)
+  console.log('context', context)
+  selectedClassification.value = val[0]
+  formData.classification = val[0]
+  bookState.show = false
+}
+
+const onPick = (value: PickerValue[], context: any) => {
+  console.log('value', value)
+  console.log('context', context)
+}
+
+const formStore = useFormStore()
+const onSubmit = () => {
+  formStore.formData = formData
+  formStore.submitForm()
+}
+
+const rules = {
+  // 标题规则：必填，长度在 2 到 50 个字符之间
+  title: [
+    { required: true, message: '标题不能为空', trigger: 'blur' },
+    { min: 2, max: 50, message: '标题长度应在 2 到 50 个字符之间', trigger: 'blur' },
+  ],
+  // 内容规则：必填，长度不少于 10 个字符
+  content: [
+    { required: true, message: '内容不能为空', trigger: 'blur' },
+    { min: 10, message: '内容长度不能少于 10 个字符', trigger: 'blur' },
+  ],
+  // 书名规则：必填，长度在 1 到 100 个字符之间
+  book: [
+    { required: true, message: '书名不能为空', trigger: 'blur' },
+    { min: 1, max: 100, message: '书名长度应在 1 到 100 个字符之间', trigger: 'blur' },
+  ],
+  // ISBN 规则：选填，若填写需符合 ISBN 格式（10 位或 13 位数字）
+  isbn: [
+    {
+      pattern: /^(?:\d{10}|\d{13})?$/,
+      message: '请输入有效的 ISBN（10 位或 13 位数字）',
+      trigger: 'blur',
+    },
+  ],
+  // 价格规则：必填，为正数且最多保留两位小数
+  price: [
+    { required: true, message: '价格不能为空', trigger: 'blur' },
+    {
+      pattern: /^\d+(\.\d{1,2})?$/,
+      message: '请输入有效的价格（正数且最多保留两位小数）',
+      trigger: 'blur',
+    },
+  ],
+  // 分类规则：必填
+  classification: [{ required: true, message: '请选择分类', trigger: 'change' }],
+}
+onMounted(() => {
+  //@ts-ignore
+  form.value.setValidateMessage(rules)
+})
+</script>
 <template>
   <t-form
     ref="form"
@@ -30,8 +179,6 @@
       ></t-textarea>
     </t-form-item>
     <!-- 添加tag -->
-
-    
 
     <!-- 上传图片 -->
     <t-form-item name="photo">
@@ -98,168 +245,14 @@
     </div>
   </t-form>
 </template>
-<script lang="ts" setup>
-import { ref, reactive, defineProps, toRefs, onMounted } from 'vue'
-import type { PickerValue } from 'tdesign-mobile-vue'
-import type { FormDataType } from '@/types'
-import type {
-  UploadChangeContext,
-  UploadFile,
-  UploadRemoveContext,
-  SuccessContext,
-  ProgressContext,
-} from 'tdesign-mobile-vue'
-import { useFormStore } from '@/stores/formStore'
-
-
-// const visible = ref(false);
-// const onClose = () => (visible.value = false);
-
-const props = defineProps({
-  disabled: Boolean,
-})
-const { disabled } = toRefs(props)
-
-// upload
-const onFail = ({ file, e }: { file: UploadFile; e: ProgressEvent }): any => {
-  console.log('---onFail', file, e)
-  return null
-}
-
-const onProgress = ({ file, percent, type, e }: ProgressContext) => {
-  console.log('---onProgress:', file, percent, type, e)
-}
-const onChangeUpload = (
-  files: Array<UploadFile>,
-  { e, response, trigger, index, file }: UploadChangeContext,
-) => {
-  console.log('====onChange', files, e, response, trigger, index, file)
-}
-const onPreview = ({ file, e }: { file: UploadFile; e: MouseEvent }) => {
-  console.log('====onPreview', file, e)
-}
-const onSuccess = ({ file, fileList, response, e }: SuccessContext | any) => {
-  console.log('====onSuccess', file, 'aaa', fileList, 'bbb', e, 'ccc', response)
-  formData.photo.push({ name: file.name, type: file.type, url: response[0] })
-}
-const onRemove = ({ index, file, e }: UploadRemoveContext) => {
-  console.log('====onRemove', index, file, e)
-  // 从表单数据中移除对应的图片信息
-  formData.photo.splice(index!, 1)
-}
-const onSelectChange = (files: Array<UploadFile>) => {
-  console.log('====onSelectChange', files)
-}
-const action = 'http://localhost:3000/api/upload'
-const files = ref([])
-
-const formData: FormDataType = reactive({
-  _id:'',
-  title: '',
-  content: '',
-  book: '',
-  isbn: '',
-  price:null ,
-  photo: files,
-  classification: '',
-})
-
-const form = ref(null)
-
-//分类
-const bookOptions = () => {
-  return [
-    {
-      label: '教科书',
-      value: '教科书',
-    },
-    {
-      label: '小说',
-      value: '小说',
-    },
-    {
-      label: '练习册',
-      value: '练习册',
-    },
-  ]
-}
-const bookState = reactive({
-  show: false,
-  book: [],
-})
-const selectedClassification = ref('')
-const onConfirm = (val: string[], context: number[]) => {
-  console.log(val)
-  console.log('context', context)
-  selectedClassification.value = val[0]
-  formData.classification = val[0]
-  bookState.show = false
-}
-
-const onPick = (value: PickerValue[], context: any) => {
-  console.log('value', value)
-  console.log('context', context)
-}
-// 步进器
-const onChangeStepper = ($event: number) => {
-  formData.price = $event
-}
-const formStore = useFormStore()
-const onSubmit = () => {
-  formStore.formData = formData
-  formStore.submitForm()
-}
-
-const rules = {
-  // 标题规则：必填，长度在 2 到 50 个字符之间
-  title: [
-    { required: true, message: '标题不能为空', trigger: 'blur' },
-    { min: 2, max: 50, message: '标题长度应在 2 到 50 个字符之间', trigger: 'blur' },
-  ],
-  // 内容规则：必填，长度不少于 10 个字符
-  content: [
-    { required: true, message: '内容不能为空', trigger: 'blur' },
-    { min: 10, message: '内容长度不能少于 10 个字符', trigger: 'blur' },
-  ],
-  // 书名规则：必填，长度在 1 到 100 个字符之间
-  book: [
-    { required: true, message: '书名不能为空', trigger: 'blur' },
-    { min: 1, max: 100, message: '书名长度应在 1 到 100 个字符之间', trigger: 'blur' },
-  ],
-  // ISBN 规则：选填，若填写需符合 ISBN 格式（10 位或 13 位数字）
-  isbn: [
-    {
-      pattern: /^(?:\d{10}|\d{13})?$/,
-      message: '请输入有效的 ISBN（10 位或 13 位数字）',
-      trigger: 'blur',
-    },
-  ],
-  // 价格规则：必填，为正数且最多保留两位小数
-  price: [
-    { required: true, message: '价格不能为空', trigger: 'blur' },
-    {
-      pattern: /^\d+(\.\d{1,2})?$/,
-      message: '请输入有效的价格（正数且最多保留两位小数）',
-      trigger: 'blur',
-    },
-  ],
-  // 分类规则：必填
-  classification: [{ required: true, message: '请选择分类', trigger: 'change' }],
-}
-onMounted(() => {
-  //@ts-ignore
-  form.value.setValidateMessage(rules)
-})
-</script>
 
 <style lang="less" scoped>
-
 /* 同步标签内间距 */
 .tag-button .tdesign-tag {
   padding: var(--td-tag-padding, 4px 8px) !important;
 }
 
-.t-form .t-form__item:not(:last-child)::after{
+.t-form .t-form__item:not(:last-child)::after {
   display: none;
 }
 .textarea-example {

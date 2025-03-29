@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Icon as TIcon } from 'tdesign-icons-vue-next';
+import { Icon as TIcon } from 'tdesign-icons-vue-next'
 </script>
 
 <template>
@@ -11,12 +11,10 @@ import { Icon as TIcon } from 'tdesign-icons-vue-next';
       <t-icon name="ellipsis" size="24px" />
     </template>
   </t-navbar>
-
 </template>
 
-
 <style lang="less" scoped>
-.search{
+.search {
   z-index: 1;
 }
 .t-icon {

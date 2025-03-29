@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useFormStore } from '@/stores/formStore'
+
 const props = defineProps({
   formData: {
     type: Object,
@@ -6,17 +9,29 @@ const props = defineProps({
   },
 })
 const { formData } = props
-console.log(props.formData)
+console.log(formData)
+const showDialog = ref(false)
+
+const formStore = useFormStore()
+
+const onConfirm = () => {
+  formStore.offUserPost(formData._id)
+  window.location.reload()
+}
+
+const onCancel = () => {
+  console.log('dialog: cancel')
+}
 </script>
 
 <template>
   <div class="bar">
     <div class="bar-header">
-        <t-avatar
-          class="avatar"
-          image="https://tdesign.gtimg.com/mobile/demos/avatar1.png"
-          size="small"
-        ></t-avatar>
+      <t-avatar
+        class="avatar"
+        image="https://tdesign.gtimg.com/mobile/demos/avatar1.png"
+        size="small"
+      ></t-avatar>
       <span class="head-content-wrap">
         <div class="nick-name">nick-name</div>
       </span>
@@ -42,12 +57,33 @@ console.log(props.formData)
 
       <div class="post-views"></div>
 
-      <button class="post-off">下架</button>
+      <button class="post-off" :class="{ 'post-off-disabled': formData.b_status === 0 }" @click="showDialog = true"
+      :disabled="formData.b_status===0">
+  {{ formData.b_status === 1 ? '下架' : '已下架' }}
+</button>
+      <t-dialog
+        v-model:visible="showDialog"
+        width="200px"
+        content="是否下架该帖"
+        cancel-btn="取消"
+        :confirm-btn="{ content: '确认', theme: 'danger' }"
+        @confirm="onConfirm"
+        @cancel="onCancel"
+      >
+      </t-dialog>
     </div>
+    <span class="material-symbols-outlined" v-if="formData.b_status===0"> check_circle </span>
   </div>
 </template>
 
 <style lang="less" scoped>
+.material-symbols-outlined {
+  font-size: 48px;
+  position: absolute; 
+  top: 0; 
+  right:20px; 
+  color: #75fb4c;
+}
 .bar-foot {
   margin-top: 1px;
   display: flex;
@@ -55,6 +91,17 @@ console.log(props.formData)
   font-size: 0.8rem;
   padding-left: 20px;
   position: relative;
+
+  .post-off.post-off-disabled{
+    border: 1px solid #ccc;
+    color: #ccc;
+    cursor: not-allowed;
+    &:hover {
+      border: 1px solid #ccc;
+      color: #ccc;
+      background-color: #fff;
+    }
+  }
   .post-off {
     position: absolute;
     right: 0;
@@ -96,10 +143,10 @@ console.log(props.formData)
   .t-cell.title-content {
     padding-left: 20px;
   }
-  .avatar{
-    --td-avatar-small-width:30px;
+  .avatar {
+    --td-avatar-small-width: 30px;
   }
-  .head-content-wrap{
+  .head-content-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,6 +159,7 @@ console.log(props.formData)
   padding: 0;
   background: #fff;
   width: 100%;
+  position: relative;
 }
 
 .pic-box {

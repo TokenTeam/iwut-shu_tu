@@ -1,37 +1,33 @@
 <script setup lang="ts">
-import { useFormStore } from '@/stores/formStore';
-import { onMounted } from 'vue';
-import { ref } from 'vue';
+import { useFormStore } from '@/stores/formStore'
+import { onMounted } from 'vue'
+import { ref} from 'vue'
+import { _ActionSheet } from 'tdesign-mobile-vue'
 import Bookbar from './BookBar.vue'
-import { _ActionSheet } from 'tdesign-mobile-vue';
 
-const formStore =useFormStore()
+const formStore = useFormStore()
 
 //进入页面获取帖子
-onMounted(()=>{
-  formStore.getFormList(true) 
-  console.log(formStore.formDataList);
+onMounted(() => {
+   formStore.clearFormDataList()
+   formStore.getFormList(true)
 })
 
-const refreshing = ref<boolean>(false);
+const refreshing = ref<boolean>(false)
 
 //下拉刷新
 const handleRefresh = () => {
-  refreshing.value = true;
+  refreshing.value = true
   setTimeout(() => {
-    formStore.hasFetched =false
     formStore.getFormList(true)
-    refreshing.value = false;
-  }, 1000);
-};
+    refreshing.value = false
+  }, 1000)
+}
 
 //下滑刷新
 const handleScrolltolower = () => {
-  formStore.hasFetched =false
-  formStore.getFormList(false) 
-
-};
-
+  formStore.getFormList(false)
+}
 </script>
 <template>
   <t-pull-down-refresh
@@ -41,16 +37,19 @@ const handleScrolltolower = () => {
     @refresh="handleRefresh"
     @scrolltolower="handleScrolltolower"
   >
-<div class="list">
-  <Bookbar v-for="(formItem) in formStore.formDataList" :key="formItem._id" :form-data="formItem"/>
-  </div>
-</t-pull-down-refresh>
+    <div class="list">
+      <Bookbar
+        v-for="formItem in formStore.formDataList"
+        :key="formItem._id"
+        :form-data="formItem"
+      />
+    </div>
+  </t-pull-down-refresh>
 </template>
 <style scoped lang="less">
-
-    .list{
-        display: flex;
-        flex-direction: column;
-        row-gap: 10px;
-    }
+.list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
 </style>

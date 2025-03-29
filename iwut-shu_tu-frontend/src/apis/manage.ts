@@ -7,3 +7,11 @@ export function getUserPostAPI(){
         method:'GET',
     })
 }
+
+//下架用户指定帖子
+export function offPostAPI(postId:string){
+    return http({
+        url:`/infos/off?postId=${postId}`,
+        method:'GET'
+    })
+}

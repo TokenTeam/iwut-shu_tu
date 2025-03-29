@@ -65,7 +65,10 @@ try {
     const existingIds =cache[u_id]||[]
 
     //构建查询条件，排除已获取的帖子如果existingIds不为空，则使用$nin操作符过滤掉这些帖子;否则，查询所有帖子
-    const query = existingIds.length>0?{_id:{$nin:existingIds}}:{};
+    const query = existingIds.length>0?{$and:[
+        {_id:{$nin:existingIds}},
+        {b_status:{$ne:0}}
+    ]}:{b_status:{$ne:0}};
     //计算符合条件的帖子总数
     const totalCount =await BookBarModel.countDocuments(query)
 
@@ -111,8 +114,7 @@ try {
 router.get('/infos/user',async(req,res)=>{
     try {
         //暂时没有用户id所以已查找全部内容代替
-        const posts =await BookBarModel().find().exec()
-
+        const posts =await BookBarModel.find().exec()
         res.json({
             code:'0000',
             msg:"获取该用户帖子成功",
@@ -127,4 +129,40 @@ router.get('/infos/user',async(req,res)=>{
     }
 })
 
+//下架用户指定的帖子
+router.get('/infos/off',async(req,res)=>{
+    try {
+        const postId =req.query.postId
+        if(!postId){
+            return res.json({
+                code:'1003',
+                msg:'获取帖子id失败',
+                data:null
+            })
+        }
+
+        const post = await BookBarModel.findOneAndUpdate(
+            //查询条件：根据帖子id查找文档
+            {_id:postId},
+            {
+                //用于设置(更新)文档中的特定字段
+                $set:{
+                    b_status:0
+                }
+            }
+        )
+        console.log(post);
+        res.json({
+            code:'0000',
+            msg:'下架帖子成功',
+            data:post
+        })
+    } catch (error) {
+        return res.json({
+            code:'1004',
+            msg:'下架帖子失败',
+            data:null
+        })
+    }
+})
 module.exports=router
