@@ -1,0 +1,14 @@
+FROM node:22-alpine
+WORKDIR /app
+
+ARG DBHOST
+ARG DBPORT
+ARG DBNAME
+
+ENV DBHOST=${DBHOST}
+ENV DBPORT=${DBPORT}
+ENV DBNAME=${DBNAME}
+
+COPY . .
+RUN npm install
+ENTRYPOINT [ "npm start" ]
