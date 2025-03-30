@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 //上传本地照片路由
-app.use('/',picRouter)
+app.use('/api',picRouter)
 //帖子相关操作路由
 app.use('/api',posInfoRouter)
 

@@ -28,7 +28,7 @@ const upload = multer({ storage });
 router.use('/uploads', express.static(uploadDir));
 
 // 处理单文件上传
-router.post('/api/upload', upload.single('file'), (req, res) => {
+router.post('/upload', upload.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: '没有文件被上传' });
   }

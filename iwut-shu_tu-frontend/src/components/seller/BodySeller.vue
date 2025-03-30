@@ -19,35 +19,35 @@ const { disabled } = toRefs(props)
 
 // upload
 const onFail = ({ file, e }: { file: UploadFile; e: ProgressEvent }): any => {
-  console.log('---onFail', file, e)
+  // console.log('---onFail', file, e)
   return null
 }
 
 const onProgress = ({ file, percent, type, e }: ProgressContext) => {
-  console.log('---onProgress:', file, percent, type, e)
+  // console.log('---onProgress:', file, percent, type, e)
 }
 const onChangeUpload = (
   files: Array<UploadFile>,
   { e, response, trigger, index, file }: UploadChangeContext,
 ) => {
-  console.log('====onChange', files, e, response, trigger, index, file)
+  // console.log('====onChange', files, e, response, trigger, index, file)
 }
 const onPreview = ({ file, e }: { file: UploadFile; e: MouseEvent }) => {
-  console.log('====onPreview', file, e)
+  // console.log('====onPreview', file, e)
 }
 const onSuccess = ({ file, fileList, response, e }: SuccessContext | any) => {
-  console.log('====onSuccess', file, 'aaa', fileList, 'bbb', e, 'ccc', response)
-  formData.photo.push({ name: file.name, type: file.type, url: response[0] })
+  // console.log('====onSuccess', file, 'aaa', fileList, 'bbb', e, 'ccc', response)
+  formData.imagePic({ name: file.name, type: file.type, url: response[0] })
 }
 const onRemove = ({ index, file, e }: UploadRemoveContext) => {
   console.log('====onRemove', index, file, e)
   // 从表单数据中移除对应的图片信息
-  formData.photo.splice(index!, 1)
+  formData.imagePic.splice(index!, 1)
 }
 const onSelectChange = (files: Array<UploadFile>) => {
   console.log('====onSelectChange', files)
 }
-const action = 'http://localhost:3000/api/upload'
+const action = '/api/upload'
 const files = ref([])
 
 const formData: FormDataType = reactive({
@@ -57,8 +57,9 @@ const formData: FormDataType = reactive({
   book: '',
   isbn: '',
   price: null,
-  photo: files,
+  imagePic: files,
   classification: '',
+  b_status:1
 })
 
 const form = ref(null)
@@ -181,7 +182,7 @@ onMounted(() => {
     <!-- 上传图片 -->
     <t-form-item name="photo">
       <t-upload
-        :default-files="formData.photo"
+        :default-files="formData.imagePic"
         multiple
         :max="8"
         :action="action"

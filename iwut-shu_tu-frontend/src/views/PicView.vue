@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 const router=useRouter()
 const formStore =useFormStore()
 const images = [
-  ...formStore.formData.imagePic.map(item=>item.i_url)
+  ...formStore.formData.imagePic.map((item:any)=>item.i_url)
 ];
 
 const onClose=async ()=>{
