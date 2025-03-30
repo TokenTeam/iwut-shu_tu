@@ -10,6 +10,7 @@ import type {
   ProgressContext,
 } from 'tdesign-mobile-vue'
 import { useFormStore } from '@/stores/formStore'
+import { http } from '@/utils'
 
 
 const props = defineProps({
@@ -37,7 +38,7 @@ const onPreview = ({ file, e }: { file: UploadFile; e: MouseEvent }) => {
 }
 const onSuccess = ({ file, fileList, response, e }: SuccessContext | any) => {
   // console.log('====onSuccess', file, 'aaa', fileList, 'bbb', e, 'ccc', response)
-  formData.imagePic({ name: file.name, type: file.type, url: response[0] })
+  formData.imagePic.push({ name: file.name, type: file.type, url: response[0] })
 }
 const onRemove = ({ index, file, e }: UploadRemoveContext) => {
   console.log('====onRemove', index, file, e)
@@ -47,9 +48,25 @@ const onRemove = ({ index, file, e }: UploadRemoveContext) => {
 const onSelectChange = (files: Array<UploadFile>) => {
   console.log('====onSelectChange', files)
 }
-const action = '/api/upload'
-const files = ref([])
+async function doUpload(x:{name: string, raw: File}[]) {
+  console.log("doUpload");
+  console.log("name",x[0].name);
+  console.log("file",x[0].raw);
+  const formData = new FormData();
+  formData.append('file', x[0].raw);
+  const result = await http({
+    url: '/upload',
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+  console.log( result);
+  return { status: 'success', response: { url: result.data.url } };
+}
 
+const files = ref([])
 const formData: FormDataType = reactive({
   _id: '',
   title: '',
@@ -185,7 +202,6 @@ onMounted(() => {
         :default-files="formData.imagePic"
         multiple
         :max="8"
-        :action="action"
         :on-fail="onFail"
         :on-progress="onProgress"
         :on-change="onChangeUpload"
@@ -194,6 +210,7 @@ onMounted(() => {
         :on-remove="onRemove"
         :on-select-change="onSelectChange"
         :allowUploadDuplicateFile="true"
+        :request-method="doUpload"
       >
       </t-upload>
     </t-form-item>

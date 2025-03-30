@@ -10,11 +10,11 @@ router.post('/info/submission',async(req,res)=>{
         //处理数据
         const price = Number(req.body.price)
 
-        const {title,content,book,isbn,photo,classification}=req.body
+        const {title,content,book,isbn,imagePic,classification}=req.body
         //如果ISBN是空字符串，则删除该字段
         const santiizedIsbn =isbn && isbn.trim()!=="" ?isbn :undefined
-
-        const imagePic =photo.map(item=>({
+        
+        const _imagePic =imagePic.map(item=>({
             i_name:item.name,
             i_type:item.type,
             i_url:item.url.url
@@ -26,7 +26,7 @@ router.post('/info/submission',async(req,res)=>{
             book,
             isbn:santiizedIsbn,
             price,
-            imagePic,
+            imagePic:_imagePic,
             classification,
             b_status:1
         })
