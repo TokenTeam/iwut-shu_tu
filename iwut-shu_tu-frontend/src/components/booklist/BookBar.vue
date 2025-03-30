@@ -1,12 +1,25 @@
 <script setup lang="ts">
+import { ref} from 'vue'
+import { useRouter } from 'vue-router'
+import { useFormStore } from '@/stores/formStore'
 const props = defineProps({
   formData: {
     type: Object,
     required: true,
   },
 })
+const formStore =useFormStore()
+const router =useRouter()
 const { formData } = props
-console.log(props.formData)
+
+//预览图片时进入另一个页面
+const handleClick=()=>{
+  formStore.isViewing=true
+  formStore.setFormData(formData)
+  router.push('/pic')
+}
+
+
 </script>
 
 <template>
@@ -33,6 +46,7 @@ console.log(props.formData)
           :src="imagePic.i_url"
           v-for="(imagePic, index) in formData.imagePic"
           :key="index"
+          @click="handleClick"
         />
       </div>
     </div>

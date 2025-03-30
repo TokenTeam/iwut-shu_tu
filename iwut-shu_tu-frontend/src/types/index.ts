@@ -6,7 +6,7 @@ export interface FormDataType{
     book: string;
     isbn: string;
     price: number|null;
-    photo: any; 
+    imagePic: any; 
     classification: string;
     b_status:number
 }

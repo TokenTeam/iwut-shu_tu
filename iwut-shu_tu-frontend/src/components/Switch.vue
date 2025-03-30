@@ -9,15 +9,15 @@ const iconFunc = () => h(AddIcon, { size: '24px' })
 const items = ref([
   {
     label: '发帖',
-    icon: '../../public/edit_square_40dp_75FBFD_FILL1_wght0_GRAD0_opsz40.png',
+    icon: '/edit_square_40dp_75FBFD_FILL1_wght0_GRAD0_opsz40.png'
   },
   {
     label: '帖子管理',
-    icon: '../../public/folder_managed_40dp_75FBFD_FILL1_wght0_GRAD0_opsz40.png',
+    icon: '/folder_managed_40dp_75FBFD_FILL1_wght0_GRAD0_opsz40.png',
   },
   {
     label: '个人中心',
-    icon: '../../public/person_40dp_75FBFD_FILL1_wght0_GRAD0_opsz40.png',
+    icon: '/person_40dp_75FBFD_FILL1_wght0_GRAD0_opsz40.png',
 
   },
 ])

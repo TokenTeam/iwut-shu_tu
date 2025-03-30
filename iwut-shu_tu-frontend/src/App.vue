@@ -4,7 +4,9 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <div class="app">
-    <RouterLink to="/booklist"></RouterLink>
+    <keep-alive>
+    <RouterLink to="/" ></RouterLink>
+  </keep-alive>
     <RouterLink to="/seller"></RouterLink>
     <RouterView />
   </div>

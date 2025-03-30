@@ -8,6 +8,11 @@ const http =axios.create({
     timeout:50000
 })
 
+//dev？
+// const http =axios.create({
+//     baseURL:'http://127.0.0.1:3000/api',
+//     timeout:50000
+// })
 //请求拦截器
 http.interceptors.request.use((config: InternalAxiosRequestConfig<any>)=>{
     //...

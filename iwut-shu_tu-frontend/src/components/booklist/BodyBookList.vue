@@ -9,8 +9,13 @@ const formStore = useFormStore()
 
 //进入页面获取帖子
 onMounted(() => {
+  //如果在预览图片结束后退回则不重新刷新帖子
+if(!formStore.viewFinish){
    formStore.clearFormDataList()
    formStore.getFormList(true)
+}
+//重置是否完成预览状态
+formStore.viewFinish =false
 })
 
 const refreshing = ref<boolean>(false)

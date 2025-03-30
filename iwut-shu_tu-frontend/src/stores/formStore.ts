@@ -12,9 +12,19 @@ export const useFormStore=defineStore('form',{
         isSubmitting:false,//表示表单是否正在提交中
         submitError:null as string |null,//提交表单时的错误信息
         isSearching:false as boolean,//表示搜索框是否正在搜索
+        isViewing:false as boolean,//表示是否正在预览图片
+        viewFinish:false as boolean
     }),
     actions:{
-
+        
+        //设置表单内容
+        setFormData(formData: FormDataType){
+            this.formData =formData
+        },
+        //清空表单内容
+        clearFormData(){
+            this.formData=<FormDataType>{}
+        },
         //发帖界面提交表单操作
         async submitForm(){
             this.isSubmitting=true;
@@ -57,8 +67,9 @@ export const useFormStore=defineStore('form',{
                     console.log(response.data.msg);
                 }
             } catch (error:any) {
+                console.log(error);
                 this.getError=error.message
-                console.log('获取表单失败',error.response.data.msg);
+                // console.log('获取表单失败',error.response.data.msg);
             }
         },
 
@@ -72,7 +83,8 @@ export const useFormStore=defineStore('form',{
                 }
             } catch (error:any) {
                 this.getError=error.message
-                console.log('获取用户帖子失败',error.response.data.msg);
+                // console.log('获取用户帖子失败',error.response.data.msg);
+                console.log(error);
             }
         },
 
@@ -111,6 +123,6 @@ export const useFormStore=defineStore('form',{
         //清空formDataList
         clearFormDataList(){
             this.formDataList=[]
-        }
+        },
     }
 })

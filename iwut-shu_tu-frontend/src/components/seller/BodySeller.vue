@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, reactive, defineProps, toRefs, onMounted } from 'vue'
+import { ref, reactive,  toRefs, onMounted } from 'vue'
 import type { PickerValue } from 'tdesign-mobile-vue'
 import type { FormDataType } from '@/types'
 import type {
@@ -11,8 +11,6 @@ import type {
 } from 'tdesign-mobile-vue'
 import { useFormStore } from '@/stores/formStore'
 
-// const visible = ref(false);
-// const onClose = () => (visible.value = false);
 
 const props = defineProps({
   disabled: Boolean,

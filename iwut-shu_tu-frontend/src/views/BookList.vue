@@ -2,6 +2,7 @@
 import NavBookList from '../components/booklist/NavBookList.vue'
 import BodyBookList from '../components/booklist/BodyBookList.vue'
 import Switch from '../components/Switch.vue'
+
 </script>
 
 <template>

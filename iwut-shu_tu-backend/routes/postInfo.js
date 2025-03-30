@@ -59,7 +59,7 @@ try {
         cache[u_id]=[]//清空缓存
     }
 
-    const limit =4;//一次最多查询5条
+    const limit =4;//一次最多查询4条
 
     //获取该用户已经获取的帖子ID
     const existingIds =cache[u_id]||[]
