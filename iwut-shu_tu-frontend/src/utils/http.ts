@@ -4,7 +4,7 @@ import axios, { type AxiosResponse, type InternalAxiosRequestConfig } from "axio
 
 //创建一个新的Axios实例，并为其配置默认设置。
 const http =axios.create({
-    baseURL:'http://127.0.0.1:3000/api',
+    baseURL:'/api',
     timeout:50000
 })
 
