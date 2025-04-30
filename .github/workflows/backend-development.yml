@@ -46,7 +46,7 @@ jobs:
           sudo docker rm ${{ vars.DOCKER_CONTAINER_NAME }} || true
           sudo docker run -d --name ${{ vars.DOCKER_CONTAINER_NAME }} \
             -p ${{ vars.DOCKER_CONTAINER_PORT }}:3000 \
-            -e DBHOST="${{ vars.DBHOST }}"
-            -e DBPORT="${{ vars.DBPORT }}"
-            -e DBNAME="${{ vars.DBNAME }}"
+            -e DBHOST="${{ vars.DBHOST }}" \
+            -e DBPORT="${{ vars.DBPORT }}" \
+            -e DBNAME="${{ vars.DBNAME }}" \
             ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_NAMESPACE }}/${{ vars.DOCKER_IMAGE_NAME }}:dev
